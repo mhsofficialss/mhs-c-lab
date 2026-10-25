@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#080d18">
+  <meta name="description" content="MHS C LAB — free calculators and beginner-friendly programming tools.">
+  <title>MHS C LAB | Programming Tools</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="script.js" defer></script>
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="#home" aria-label="MHS C LAB home">
+        <span class="brand-mark" aria-hidden="true">&lt;/&gt;</span>
+        <span class="brand-name">MHS <span>C LAB</span></span>
+      </a>
+
+      <button class="menu-toggle" id="menu-toggle" type="button"
+        aria-label="Open navigation" aria-expanded="false" aria-controls="main-nav">
+        <span></span><span></span><span></span>
+      </button>
+
+      <nav class="main-nav" id="main-nav" aria-label="Main navigation">
+        <a href="#tools">Tools</a>
+        <a href="#about">About</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="home">
+    <section class="hero">
+      <div class="hero-orbit orbit-one" aria-hidden="true"></div>
+      <div class="hero-orbit orbit-two" aria-hidden="true"></div>
+      <div class="container hero-content">
+        <p class="eyebrow"><span class="status-dot"></span> SIMPLE · FREE · USEFUL</p>
+        <h1>Learn. Calculate.<br><span>Code with confidence.</span></h1>
+        <p class="hero-description">Helpful calculators and beginner-friendly programming tools — all in one place.</p>
+        <a class="button button-primary hero-button" href="#tools">Explore tools <span aria-hidden="true">↓</span></a>
+      </div>
+    </section>
+
+    <section class="tools-section container" id="tools">
+      <div class="section-heading">
+        <p class="eyebrow">YOUR TOOLBOX</p>
+        <h2>Choose a tool</h2>
+        <p>Select a tool, enter your values, and get your result instantly.</p>
+      </div>
+
+      <div class="tools-grid">
+        <article class="tool-card" id="age-calculator">
+          <div class="tool-icon icon-blue" aria-hidden="true">🎂</div>
+          <h3>Age Calculator</h3>
+          <p class="tool-description">Calculate your age from your date of birth.</p>
+          <form id="age-form" class="tool-form">
+            <label for="birth-date">Date of birth</label>
+            <input id="birth-date" name="birth-date" type="date" required>
+            <button class="button button-primary button-full" type="submit">Calculate age</button>
+          </form>
+          <div class="result" id="age-result" aria-live="polite">Your age will appear here.</div>
+        </article>
+
+        <article class="tool-card" id="rectangle-calculator">
+          <div class="tool-icon icon-purple" aria-hidden="true">▱</div>
+          <h3>Rectangle Calculator</h3>
+          <p class="tool-description">Calculate the area and perimeter of a rectangle.</p>
+          <form id="rectangle-form" class="tool-form">
+            <label for="rect-length">Length</label>
+            <input id="rect-length" type="number" min="0" step="any" placeholder="Enter length" required>
+            <label for="rect-width">Width</label>
+            <input id="rect-width" type="number" min="0" step="any" placeholder="Enter width" required>
+            <button class="button button-primary button-full" type="submit">Calculate</button>
+          </form>
+          <div class="result" id="rectangle-result" aria-live="polite">Area and perimeter will appear here.</div>
+        </article>
+
+        <article class="tool-card" id="even-odd-checker">
+          <div class="tool-icon icon-green" aria-hidden="true">½</div>
+          <h3>Even / Odd Checker</h3>
+          <p class="tool-description">Check whether a whole number is even or odd.</p>
+          <form id="even-odd-form" class="tool-form">
+            <label for="number-input">Enter an integer</label>
+            <input id="number-input" type="number" step="1" placeholder="e.g. 27" required>
+            <button class="button button-primary button-full" type="submit">Check number</button>
+          </form>
+          <div class="result" id="even-odd-result" aria-live="polite">Your result will appear here.</div>
+        </article>
+
+        <article class="tool-card" id="grade-calculator">
+          <div class="tool-icon icon-orange" aria-hidden="true">🎓</div>
+          <h3>Grade Calculator</h3>
+          <p class="tool-description">Enter your marks to calculate your grade.</p>
+          <form id="grade-form" class="tool-form">
+            <label for="marks">Enter your marks (0–100)</label>
+            <input id="marks" type="number" min="0" max="100" step="1" placeholder="e.g. 75" required>
+            <button class="button button-primary button-full" type="submit">Calculate grade</button>
+          </form>
+          <div class="result" id="grade-result" aria-live="polite">Your grade will appear here.</div>
+        </article>
+      </div>
+    </section>
+
+    <section class="about-section container" id="about">
+      <div class="about-card">
+        <div class="brand-mark about-mark" aria-hidden="true">&lt;/&gt;</div>
+        <p class="eyebrow">ABOUT MHS C LAB</p>
+        <h2>Small tools. Bigger ideas.</h2>
+        <p>MHS C LAB is a beginner-friendly collection of simple online tools for students and new programmers. Practice, learn, and calculate — one step at a time.</p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <div class="footer-brand">
+        <span class="brand-mark footer-mark" aria-hidden="true">&lt;/&gt;</span>
+        <div>
+          <strong>MHS C LAB</strong>
+          <p>Learn by doing.</p>
+        </div>
+      </div>
+      <div class="footer-copy">
+        <p class="copyright">© 2026 Mehedi Hasan Shuvo. All rights reserved.</p>
+        <p class="footer-note">Made for learners, with care.</p>
+      </div>
+      <a class="back-to-top" href="#home">Back to top ↑</a>
+    </div>
+  </footer>
+</body>
+</html>
