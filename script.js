@@ -254,3 +254,82 @@ if (gradeForm) {
     if (event.key === "Enter") convert.click();
   });
 })();
+
+(() => {
+  const baseInput = document.getElementById("subBase");
+  const aInput = document.getElementById("subA");
+  const bInput = document.getElementById("subB");
+  const output = document.getElementById("subResult");
+  const calculate = document.getElementById("subCalculate");
+  const reset = document.getElementById("subReset");
+
+  if (!baseInput || !aInput || !bInput || !output ||
+      !calculate || !reset) return;
+
+  function parseBaseNumber(text, base) {
+    let s = text.trim().toUpperCase();
+    if (!s) throw Error("Please enter both numbers.");
+
+    let sign = 1n;
+    if (s.startsWith("-")) {
+      sign = -1n;
+      s = s.slice(1);
+    } else if (s.startsWith("+")) {
+      s = s.slice(1);
+    }
+
+    if (!s) throw Error("Invalid number.");
+
+    const digits = "0123456789ABCDEF";
+    let value = 0n;
+
+    for (const ch of s) {
+      const digit = digits.indexOf(ch);
+
+      if (digit < 0 || digit >= base) {
+        throw Error(`Digit "${ch}" is invalid in base ${base}.`);
+      }
+
+      value = value * BigInt(base) + BigInt(digit);
+    }
+
+    return sign * value;
+  }
+
+  function formatBaseNumber(value, base) {
+    if (value < 0n) {
+      return "-" + (-value).toString(base).toUpperCase();
+    }
+    return value.toString(base).toUpperCase();
+  }
+
+  calculate.addEventListener("click", () => {
+    try {
+      const base = Number(baseInput.value);
+      const a = parseBaseNumber(aInput.value, base);
+      const b = parseBaseNumber(bInput.value, base);
+      const answer = a - b;
+
+      const result = formatBaseNumber(answer, base);
+      const decimalResult = answer.toString();
+
+      output.textContent =
+        `A − B = ${result}\n` +
+        `Base: ${base}\n` +
+        `Decimal equivalent: ${decimalResult}`;
+
+      output.style.color = "#67e8b5";
+    } catch (error) {
+      output.textContent = error.message;
+      output.style.color = "#ff7b86";
+    }
+  });
+
+  reset.addEventListener("click", () => {
+    aInput.value = "";
+    bInput.value = "";
+    baseInput.value = "10";
+    output.textContent = "Result will appear here.";
+    output.style.color = "#67e8f9";
+  });
+})();
