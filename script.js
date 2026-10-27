@@ -143,3 +143,95 @@ if (gradeForm) {
     showResult("grade-result", `Your marks: <strong>${marks}</strong><br>Your grade: <strong>${grade}</strong>`);
   });
 }
+
+/* Number System Converter */
+#number-system {
+  background: #0b1220;
+  color: #e5edff;
+  border: 1px solid #263754;
+  border-radius: 18px;
+  padding: 24px;
+}
+
+#number-system h2 {
+  color: #60a5fa;
+  margin: 14px 0;
+}
+
+#number-system p {
+  color: #a8b7d1;
+  line-height: 1.6;
+}
+
+#number-system label {
+  display: block;
+  margin: 14px 0 8px;
+  color: #dbeafe;
+  font-weight: 600;
+}
+
+#number-system input,
+#number-system select {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 13px;
+  background: #111c30;
+  color: #fff;
+  border: 1px solid #334766;
+  border-radius: 10px;
+  font-size: 16px;
+}
+
+.ns-selects {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+
+#number-system button {
+  width: 100%;
+  margin-top: 16px;
+  padding: 14px;
+  border: 0;
+  border-radius: 10px;
+  background: #315eff;
+  color: white;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+#number-system button:hover {
+  background: #4778ff;
+}
+
+#number-system .ns-reset {
+  margin-top: 10px;
+  background: #1e293b;
+  border: 1px solid #334766;
+}
+
+#number-system .ns-result {
+  margin-top: 18px;
+  padding: 16px;
+  background: #111c30;
+  border: 1px solid #263754;
+  border-radius: 10px;
+  color: #67e8f9;
+  overflow-wrap: anywhere;
+}
+
+#number-system .ns-note {
+  font-size: 12px;
+}
+
+@media (max-width: 480px) {
+  #number-system {
+    padding: 17px;
+  }
+
+  .ns-selects {
+    grid-template-columns: 1fr;
+    gap: 4px;
+  }
+}
