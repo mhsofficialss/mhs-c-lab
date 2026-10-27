@@ -86,6 +86,44 @@
           </form>
           <div class="result" id="even-odd-result" aria-live="polite">Your result will appear here.</div>
         </article>
+        
+<section class="tool-card" id="number-system">
+  <div class="tool-icon">01</div>
+  <h2>Number System Converter</h2>
+  <p>Convert Binary, Decimal, Octal and Hexadecimal numbers.</p>
+
+  <label for="nsInput">Enter Number</label>
+  <input id="nsInput" type="text" placeholder="e.g. 101101.101" />
+
+  <div class="ns-selects">
+    <div>
+      <label for="nsFrom">From Base</label>
+      <select id="nsFrom">
+        <option value="2">Binary (2)</option>
+        <option value="8">Octal (8)</option>
+        <option value="10" selected>Decimal (10)</option>
+        <option value="16">Hexadecimal (16)</option>
+      </select>
+    </div>
+    <div>
+      <label for="nsTo">To Base</label>
+      <select id="nsTo">
+        <option value="2">Binary (2)</option>
+        <option value="8">Octal (8)</option>
+        <option value="10">Decimal (10)</option>
+        <option value="16" selected>Hexadecimal (16)</option>
+      </select>
+    </div>
+  </div>
+
+  <button type="button" id="nsConvert">Convert Number</button>
+  <button type="button" id="nsReset" class="ns-reset">Reset</button>
+
+  <div id="nsResult" class="ns-result" aria-live="polite">
+    Your result will appear here.
+  </div>
+  <p class="ns-note">Fractional numbers supported. Results may be rounded to 12 fractional digits.</p>
+</section>
 
         <article class="tool-card" id="grade-calculator">
           <div class="tool-icon icon-orange" aria-hidden="true">🎓</div>
