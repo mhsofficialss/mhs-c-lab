@@ -245,3 +245,72 @@ button, a, input { -webkit-tap-highlight-color: transparent; }
     gap: 4px;
   }
 }
+
+#base-subtraction {
+  background: #0b1220;
+  color: #e5edff;
+  border: 1px solid #263754;
+  border-radius: 18px;
+  padding: 24px;
+}
+
+#base-subtraction h2 {
+  color: #60a5fa;
+}
+
+#base-subtraction label {
+  display: block;
+  margin: 14px 0 7px;
+  font-weight: 600;
+}
+
+#base-subtraction input,
+#base-subtraction select {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 12px;
+  border: 1px solid #334766;
+  border-radius: 9px;
+  background: #111c30;
+  color: white;
+  font-size: 16px;
+}
+
+#base-subtraction button {
+  width: 100%;
+  margin-top: 14px;
+  padding: 13px;
+  border: 0;
+  border-radius: 9px;
+  background: #315eff;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+#base-subtraction button:hover {
+  background: #4778ff;
+}
+
+#base-subtraction #subReset {
+  background: #1e293b;
+  border: 1px solid #334766;
+}
+
+#base-subtraction #subResult {
+  margin-top: 18px;
+  padding: 15px;
+  border-radius: 10px;
+  background: #111c30;
+  border: 1px solid #263754;
+  color: #67e8f9;
+  overflow-wrap: anywhere;
+  white-space: pre-wrap;
+  line-height: 1.8;
+}
+
+@media (max-width: 480px) {
+  #base-subtraction {
+    padding: 16px;
+  }
+}
