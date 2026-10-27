@@ -75,6 +75,31 @@
           <div class="result" id="rectangle-result" aria-live="polite">Area and perimeter will appear here.</div>
         </article>
 
+<section class="tool-card" id="base-subtraction">
+  <h2>Base Subtraction Calculator</h2>
+  <p>Subtract numbers in Binary, Octal, Decimal or Hexadecimal.</p>
+
+  <label for="subBase">Select Number Base</label>
+  <select id="subBase">
+    <option value="2">Binary (Base 2)</option>
+    <option value="8">Octal (Base 8)</option>
+    <option value="10" selected>Decimal (Base 10)</option>
+    <option value="16">Hexadecimal (Base 16)</option>
+  </select>
+
+  <label for="subA">First Number (A)</label>
+  <input id="subA" type="text" placeholder="e.g. 25">
+
+  <label for="subB">Second Number (B)</label>
+  <input id="subB" type="text" placeholder="e.g. 17">
+
+  <button type="button" id="subCalculate">Subtract (A − B)</button>
+  <button type="button" id="subReset">Reset</button>
+
+  <div id="subResult" class="ns-result" aria-live="polite">
+    Result will appear here.
+  </div>
+</section>
         <article class="tool-card" id="even-odd-checker">
           <div class="tool-icon icon-green" aria-hidden="true">½</div>
           <h3>Even / Odd Checker</h3>
