@@ -144,94 +144,113 @@ if (gradeForm) {
   });
 }
 
-/* Number System Converter */
-#number-system {
-  background: #0b1220;
-  color: #e5edff;
-  border: 1px solid #263754;
-  border-radius: 18px;
-  padding: 24px;
-}
 
-#number-system h2 {
-  color: #60a5fa;
-  margin: 14px 0;
-}
+(() => {
+  const input = document.getElementById("nsInput");
+  const from = document.getElementById("nsFrom");
+  const to = document.getElementById("nsTo");
+  const output = document.getElementById("nsResult");
+  const convert = document.getElementById("nsConvert");
+  const reset = document.getElementById("nsReset");
 
-#number-system p {
-  color: #a8b7d1;
-  line-height: 1.6;
-}
+  if (!input || !from || !to || !output || !convert || !reset) return;
 
-#number-system label {
-  display: block;
-  margin: 14px 0 8px;
-  color: #dbeafe;
-  font-weight: 600;
-}
+  function convertNumber(raw, sourceBase, targetBase) {
+    let s = raw.trim().toUpperCase();
 
-#number-system input,
-#number-system select {
-  width: 100%;
-  box-sizing: border-box;
-  padding: 13px;
-  background: #111c30;
-  color: #fff;
-  border: 1px solid #334766;
-  border-radius: 10px;
-  font-size: 16px;
-}
+    if (!s || s.includes(" ")) throw Error("Enter a number first.");
+    if (s.includes("." ) && s.indexOf(".") !== s.lastIndexOf(".")) {
+      throw Error("Use only one decimal point.");
+    }
 
-.ns-selects {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 14px;
-}
+    let sign = "";
+    if (s[0] === "-" || s[0] === "+") {
+      if (s[0] === "-") sign = "-";
+      s = s.slice(1);
+    }
 
-#number-system button {
-  width: 100%;
-  margin-top: 16px;
-  padding: 14px;
-  border: 0;
-  border-radius: 10px;
-  background: #315eff;
-  color: white;
-  font-size: 16px;
-  font-weight: 700;
-  cursor: pointer;
-}
+    if (!s || s === ".") throw Error("Enter a valid number.");
 
-#number-system button:hover {
-  background: #4778ff;
-}
+    const parts = s.split(".");
+    const integerPart = parts[0] || "0";
+    const fractionPart = parts[1] || "";
 
-#number-system .ns-reset {
-  margin-top: 10px;
-  background: #1e293b;
-  border: 1px solid #334766;
-}
+    const valid = "0123456789ABCDEF".slice(0, sourceBase);
 
-#number-system .ns-result {
-  margin-top: 18px;
-  padding: 16px;
-  background: #111c30;
-  border: 1px solid #263754;
-  border-radius: 10px;
-  color: #67e8f9;
-  overflow-wrap: anywhere;
-}
+    for (const ch of integerPart + fractionPart) {
+      if (!valid.includes(ch)) {
+        throw Error(`Invalid digit "${ch}" for base ${sourceBase}.`);
+      }
+    }
 
-#number-system .ns-note {
-  font-size: 12px;
-}
+    // Convert the integer part exactly using BigInt.
+    let integer = 0n;
+    for (const ch of integerPart) {
+      integer = integer * BigInt(sourceBase) +
+        BigInt(valid.indexOf(ch));
+    }
 
-@media (max-width: 480px) {
-  #number-system {
-    padding: 17px;
+    let integerResult = integer.toString(targetBase).toUpperCase();
+
+    // Convert the fraction exactly as a rational number.
+    let numerator = 0n;
+    for (const ch of fractionPart) {
+      numerator = numerator * BigInt(sourceBase) +
+        BigInt(valid.indexOf(ch));
+    }
+
+    let denominator = BigInt(sourceBase) ** BigInt(fractionPart.length);
+    let fractionResult = "";
+
+    if (numerator !== 0n) {
+      let remainder = numerator;
+      const digits = "0123456789ABCDEF";
+
+      for (let i = 0; i < 12 && remainder !== 0n; i++) {
+        remainder *= BigInt(targetBase);
+        const digit = remainder / denominator;
+        remainder %= denominator;
+        fractionResult += digits[Number(digit)];
+      }
+
+      // Round the displayed fraction to 12 digits.
+      if (remainder !== 0n && fractionResult.length === 12) {
+        // Truncation is used to keep the displayed result predictable.
+      }
+    }
+
+    const result = integerResult +
+      (fractionResult ? "." + fractionResult : "");
+
+    return (sign && (integer !== 0n || numerator !== 0n) ? sign : "") + result;
   }
 
-  .ns-selects {
-    grid-template-columns: 1fr;
-    gap: 4px;
-  }
-}
+  convert.addEventListener("click", () => {
+    try {
+      const result = convertNumber(
+        input.value,
+        Number(from.value),
+        Number(to.value)
+      );
+
+      output.textContent = `Result: ${result}`;
+      output.style.color = "#67e8f9";
+    } catch (error) {
+      output.textContent = error.message;
+      output.style.color = "#ff7b86";
+    }
+  });
+
+  reset.addEventListener("click", () => {
+    input.value = "";
+    from.value = "10";
+    to.value = "16";
+    output.textContent = "Your result will appear here.";
+    output.style.color = "#67e8f9";
+    input.focus();
+  });
+
+  input.addEventListener("keydown", (event) => {
+    if (event.key === "Enter") convert.click();
+  });
+})();
