@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MHS TechLab | Admin Dashboard</title>
+<style>
+body{margin:0;padding:24px;font-family:Arial,sans-serif;background:#0b1020;color:#eef2ff}
+main{max-width:850px;margin:auto}
+.panel{background:#151e32;border:1px solid #33415e;border-radius:14px;padding:20px;margin-top:18px}
+button{padding:10px 14px;margin:4px;border:0;border-radius:8px;cursor:pointer;font-weight:bold}
+.approve{background:#34d399;color:#052e20}
+.reject{background:#f87171;color:#450a0a}
+#message{white-space:pre-wrap;overflow-wrap:anywhere;color:#bae6fd}
+.item{border-bottom:1px solid #33415e;padding:14px 0;overflow-wrap:anywhere}
+small{color:#aab8d0}
+</style>
+</head>
+<body>
+<main>
+  <h1>MHS TechLab</h1>
+  <h2>Admin Dashboard</h2>
+  <p id="message">Checking admin access...</p>
+  <div class="panel">
+    <button id="refresh">Refresh users</button>
+    <button id="logout">Log out</button>
+    <div id="users"></div>
+  </div>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+const SUPABASE_URL = "https://niytzhfdzvzufryvlawz.supabase.co";
+const SUPABASE_KEY = "sb_publishable_dyOywrIaEIPEjzHXqYnwVg_5VebSokg";
+
+const db = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+const message = document.getElementById("message");
+const users = document.getElementById("users");
+
+async function start() {
+  const { data: { user }, error } = await db.auth.getUser();
+
+  if (error || !user) {
+    message.textContent = "Please log in first.";
+    return;
+  }
+
+  const { data: admin, error: adminError } =
+    await db.rpc("is_mhs_admin");
+
+  if (adminError || admin !== true) {
+    message.textContent = "Access denied. Admin account required.";
+    return;
+  }
+
+  message.textContent = "Admin verified: " + user.email;
+  document.getElementById("refresh").onclick = loadUsers;
+  document.getElementById("logout").onclick = async () => {
+    await db.auth.signOut();
+    location.href = "./";
+  };
+
+  await loadUsers();
+}
+
+async function loadUsers() {
+  users.textContent = "Loading users...";
+
+  const { data, error } = await db
+    .from("user_access")
+    .select("user_id,status,created_at")
+    .order("created_at", { ascending: false });
+
+  if (error) {
+    users.textContent = "Could not load users: " + error.message;
+    return;
+  }
+
+  users.replaceChildren();
+
+  if (!data.length) {
+    users.textContent = "No users found.";
+    return;
+  }
+
+  data.forEach((u) => {
+    const item = document.createElement("section");
+    item.className = "item";
+
+    const id = document.createElement("div");
+    id.textContent = "User ID: " + u.user_id;
+
+    const status = document.createElement("p");
+    status.textContent = "Status: " + u.status;
+
+    const date = document.createElement("small");
+    date.textContent = "Created: " + new Date(u.created_at).toLocaleString();
+
+    item.append(id, status, date);
+
+    if (u.status !== "approved") {
+      const approve = document.createElement("button");
+      approve.className = "approve";
+      approve.textContent = "Approve";
+      approve.onclick = () => changeStatus(u.user_id, "approved");
+
+      item.append(approve);
+    }
+
+    if (u.status !== "rejected") {
+      const reject = document.createElement("button");
+      reject.className = "reject";
+      reject.textContent = "Reject";
+      reject.onclick = () => changeStatus(u.user_id, "rejected");
+
+      item.append(reject);
+    }
+
+    users.append(item);
+  });
+}
+
+async function changeStatus(userId, status) {
+  if (!confirm("Change this user's status to " + status + "?")) return;
+
+  const { error } = await db
+    .from("user_access")
+    .update({ status })
+    .eq("user_id", userId);
+
+  if (error) {
+    message.textContent = "Update failed: " + error.message;
+    return;
+  }
+
+  message.textContent = "User status updated to " + status;
+  await loadUsers();
+}
+
+start();
+</script>
+</body>
+</html>
