@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MHS TechLab | Private Notes</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      padding: 20px;
+      font-family: Arial, sans-serif;
+      color: #eef2ff;
+      background: #080d1b;
+    }
+    .card {
+      width: 100%;
+      max-width: 420px;
+      padding: 28px;
+      border: 1px solid #263653;
+      border-radius: 18px;
+      background: #111a2d;
+      box-shadow: 0 18px 55px #0006;
+    }
+    h1 { margin-top: 0; font-size: 26px; }
+    p { color: #b7c4da; line-height: 1.5; }
+    label { display: block; margin: 16px 0 7px; }
+    input {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #394b69;
+      border-radius: 9px;
+      background: #091222;
+      color: white;
+    }
+    button {
+      width: 100%;
+      padding: 12px;
+      margin-top: 14px;
+      border: 0;
+      border-radius: 9px;
+      background: #38bdf8;
+      color: #07111f;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    button.secondary { background: #263653; color: white; }
+    #message { overflow-wrap: anywhere; font-size: 14px; }
+    a { color: #7dd3fc; }
+  </style>
+</head>
+<body>
+  <main class="card">
+    <h1>MHS TechLab</h1>
+    <p>Private Notes — Sign in or create an account.</p>
+
+    <form id="authForm">
+      <label for="email">Email address</label>
+      <input id="email" type="email" autocomplete="email" required>
+
+      <label for="password">Password</label>
+      <input id="password" type="password"
+             autocomplete="current-password" minlength="8" required>
+
+      <button type="submit">Log In</button>
+      <button class="secondary" id="signup" type="button">
+        Create Account
+      </button>
+    </form>
+
+    <p id="message" role="status"></p>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+    const SUPABASE_URL = "https://niytzhfdzvzufryvlawz.supabase.co";
+    const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_dyOywrIaEIPEjzHXqYnwVg_5VebSokg";
+
+    const client = window.supabase.createClient(
+      SUPABASE_URL,
+      SUPABASE_PUBLISHABLE_KEY
+    );
+
+    const form = document.getElementById("authForm");
+    const message = document.getElementById("message");
+    const email = document.getElementById("email");
+    const password = document.getElementById("password");
+
+    async function showResult(result) {
+      if (result.error) {
+        message.textContent = result.error.message;
+        return false;
+      }
+      return true;
+    }
+
+    form.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      message.textContent = "Signing in...";
+
+      const { data, error } = await client.auth.signInWithPassword({
+        email: email.value.trim(),
+        password: password.value
+      });
+
+      if (error) {
+        message.textContent = error.message;
+        return;
+      }
+
+      const { data: status, error: statusError } = await client
+        .from("user_access")
+        .select("status")
+        .eq("user_id", data.user.id)
+        .maybeSingle();
+
+      if (statusError || !status) {
+        message.textContent =
+          "Could not verify approval. Please contact the administrator.";
+        return;
+      }
+
+      if (status.status !== "approved") {
+        message.textContent = status.status === "rejected"
+          ? "Your access request was rejected."
+          : "Your account is awaiting administrator approval.";
+        return;
+      }
+
+      message.textContent = "Login successful. Opening Private Notes...";
+      window.location.href = "./notes.html";
+    });
+
+    document.getElementById("signup").addEventListener("click", async () => {
+      message.textContent = "Creating account...";
+
+      const { data, error } = await client.auth.signUp({
+        email: email.value.trim(),
+        password: password.value,
+        options: {
+          emailRedirectTo: "https://mhsofficialss.github.io/mhstechlab/private-notes/"
+        }
+      });
+
+      if (error) {
+        message.textContent = error.message;
+        return;
+      }
+
+      message.textContent = data.session
+        ? "Account created. Your access is awaiting approval."
+        : "Account created. Check your email to confirm, then wait for administrator approval.";
+    });
+  </script>
+</body>
+</html>
