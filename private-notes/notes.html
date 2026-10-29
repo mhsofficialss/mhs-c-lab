@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MHS TechLab | Private Notes</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      padding: 24px;
+      min-height: 100vh;
+      font-family: Arial, sans-serif;
+      color: #eaf2ff;
+      background: #07111f;
+    }
+    main {
+      max-width: 800px;
+      margin: 40px auto;
+      padding: 28px;
+      border: 1px solid #263b56;
+      border-radius: 18px;
+      background: #101e30;
+    }
+    h1 { color: #55d6ff; }
+    a, button {
+      display: inline-block;
+      margin: 8px 8px 8px 0;
+      padding: 12px 16px;
+      border: 0;
+      border-radius: 8px;
+      background: #00b9e8;
+      color: #06111d;
+      font-weight: bold;
+      text-decoration: none;
+      cursor: pointer;
+    }
+    #message { color: #ffd479; }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>MHS TechLab — Private Notes</h1>
+    <p id="message">Checking your access...</p>
+    <div id="notes" hidden>
+      <p>Welcome to the Private Notes section.</p>
+      <p>Google Drive notes links can be added here after access is verified.</p>
+    </div>
+    <button id="logout" hidden>Log out</button>
+    <p><a href="../index.html">Back to MHS TechLab</a></p>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+    const SUPABASE_URL = "https://niytzhfdzvzufryvlawz.supabase.co";
+    const SUPABASE_KEY = "sb_publishable_dyOywrIaEIPEjzHXqYnwVg_5VebSokg";
+    const db = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+    async function checkAccess() {
+      const message = document.getElementById("message");
+      const { data: { user }, error } = await db.auth.getUser();
+
+      if (error || !user) {
+        message.textContent = "Please log in first.";
+        setTimeout(() => {
+          window.location.replace("./");
+        }, 1500);
+        return;
+      }
+
+      const { data, error: accessError } = await db
+        .from("user_access")
+        .select("status")
+        .eq("user_id", user.id)
+        .maybeSingle();
+
+      if (accessError || !data || data.status !== "approved") {
+        message.textContent = "Your account is not approved yet.";
+        return;
+      }
+
+      message.textContent = "Access approved. Welcome!";
+      document.getElementById("notes").hidden = false;
+      document.getElementById("logout").hidden = false;
+    }
+
+    document.getElementById("logout").addEventListener("click", async () => {
+      await db.auth.signOut();
+      window.location.replace("./");
+    });
+
+    checkAccess();
+  </script>
+</body>
+</html>
