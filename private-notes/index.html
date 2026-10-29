@@ -68,6 +68,18 @@
       <button type="submit">Log In</button>
       <button class="secondary" id="signup" type="button">
         Create Account
+        <button class="secondary" id="forgot" type="button">
+  Forgot Password?
+</button>
+
+<div id="resetBox" hidden>
+  <label for="newPassword">New password</label>
+  <input id="newPassword" type="password" minlength="8"
+         autocomplete="new-password">
+  <button id="savePassword" type="button">
+    Save New Password
+  </button>
+</div>
       </button>
     </form>
 
@@ -154,6 +166,44 @@
         ? "Account created. Your access is awaiting approval."
         : "Account created. Check your email to confirm, then wait for administrator approval.";
     });
+    document.getElementById("forgot").addEventListener("click", async () => {
+  const address = email.value.trim();
+
+  if (!address) {
+    message.textContent = "আগে তোমার Gmail address লেখো।";
+    return;
+  }
+
+  const { error } = await client.auth.resetPasswordForEmail(address, {
+    redirectTo: "https://mhsofficialss.github.io/mhstechlab/private-notes/"
+  });
+
+  message.textContent = error
+    ? error.message
+    : "Reset email পাঠানোর অনুরোধ করা হয়েছে। Gmail Inbox ও Spam পরীক্ষা করো।";
+});
+
+client.auth.onAuthStateChange((event) => {
+  if (event === "PASSWORD_RECOVERY") {
+    document.getElementById("resetBox").hidden = false;
+    message.textContent = "তোমার নতুন password সেট করো।";
+  }
+});
+
+document.getElementById("savePassword").addEventListener("click", async () => {
+  const newPassword = document.getElementById("newPassword").value;
+
+  if (newPassword.length < 8) {
+    message.textContent = "কমপক্ষে ৮ অক্ষরের password দাও।";
+    return;
+  }
+
+  const { error } = await client.auth.updateUser({ password: newPassword });
+
+  message.textContent = error
+    ? error.message
+    : "Password পরিবর্তন হয়েছে। এবার নতুন password দিয়ে Login করো।";
+});
   </script>
 </body>
 </html>
