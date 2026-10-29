@@ -314,3 +314,172 @@ button, a, input { -webkit-tap-highlight-color: transparent; }
     padding: 16px;
   }
 }
+
+/* ==========================================
+   MHS C LAB — BLACK + BURGUNDY + WINE RED
+   Theme override: append to the END of style.css
+   ========================================== */
+
+:root {
+  --theme-black: #080808;
+  --theme-black-soft: #10090c;
+  --theme-burgundy: #24000b;
+  --theme-burgundy-card: #1b1015;
+  --theme-wine: #8b0000;
+  --theme-wine-hover: #a8102b;
+  --theme-text: #f5f3f4;
+  --theme-muted: #b9aab0;
+  --theme-border: #48202d;
+}
+
+/* Main background and text */
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--theme-black);
+  color: var(--theme-text);
+}
+
+/* Header and navigation */
+.site-header {
+  background: rgba(8, 8, 8, 0.97);
+  border-bottom: 1px solid var(--theme-border);
+}
+
+.site-header a {
+  transition: color 0.25s ease;
+}
+
+.site-header a:hover {
+  color: #d96b85;
+}
+
+/* Main hero section */
+.hero,
+.hero-section {
+  background-color: var(--theme-black);
+}
+
+.hero h1 span,
+.hero-section h1 span {
+  color: #b52b4b;
+}
+
+.hero p,
+.hero-section p {
+  color: var(--theme-muted);
+}
+
+/* Cards — black and burgundy gradient */
+.tool-card,
+.calculator-card,
+.card,
+.tool-box {
+  background: linear-gradient(
+    145deg,
+    #1b1015 0%,
+    #10090c 60%,
+    #24000b 100%
+  );
+  border: 1px solid var(--theme-border);
+  border-radius: 22px;
+  transition:
+    border-color 0.25s ease,
+    transform 0.25s ease,
+    box-shadow 0.25s ease;
+}
+
+.tool-card:hover,
+.calculator-card:hover,
+.card:hover,
+.tool-box:hover {
+  border-color: #8b2944;
+  box-shadow: 0 12px 32px rgba(139, 0, 0, 0.16);
+}
+
+/* Wine-red buttons */
+button,
+.btn,
+.button,
+input[type="button"],
+input[type="submit"] {
+  background: var(--theme-wine);
+  color: #ffffff;
+  border-color: var(--theme-wine);
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease,
+    transform 0.2s ease;
+}
+
+button:hover,
+.btn:hover,
+.button:hover,
+input[type="button"]:hover,
+input[type="submit"]:hover {
+  background: var(--theme-wine-hover);
+  border-color: var(--theme-wine-hover);
+}
+
+button:active,
+.btn:active,
+.button:active {
+  transform: scale(0.98);
+}
+
+/* Form fields */
+input,
+select,
+textarea {
+  background-color: #10090c;
+  color: var(--theme-text);
+  border-color: #59303b;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  outline: none;
+  border-color: #b52b4b;
+  box-shadow: 0 0 0 3px rgba(139, 0, 0, 0.18);
+}
+
+/* Links and highlights */
+a {
+  transition: color 0.2s ease;
+}
+
+a:hover {
+  color: #e17b94;
+}
+
+.accent,
+.highlight,
+.section-label {
+  color: #c44a68;
+}
+
+/* Footer */
+footer,
+.site-footer {
+  background-color: #080808;
+  border-top: 1px solid var(--theme-border);
+  color: var(--theme-muted);
+}
+
+/* Keep layout responsive */
+img,
+video {
+  max-width: 100%;
+}
+
+@media (max-width: 600px) {
+  .tool-card,
+  .calculator-card,
+  .card,
+  .tool-box {
+    border-radius: 18px;
+  }
+}
